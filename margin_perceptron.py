@@ -26,36 +26,27 @@ max_iterations = 1000  # Stop after a maximum number of iterations
 for _ in range(max_iterations):
     errors = 0
     for i in range(len(X)):
-        # Compute the prediction
+        # Calculate the prediction
         prediction = np.sign(np.dot(w, X[i]) + b)
         
-        # Update if misclassified
+        # If misclassified, update weights and bias
         if y[i] * (np.dot(w, X[i]) + b) <= 0:
             w += learning_rate * y[i] * X[i]
             b += learning_rate * y[i]
             errors += 1
-    # Stop if no misclassifications
+    # If no errors, stop the algorithm
     if errors == 0:
         break
 
-# Normalize the weights
-norm = np.linalg.norm(w)
-w_normalized = w / norm
-b_normalized = b / norm
+# Output the resulting weights and bias
+print(f"Final weights: {w}")
+print(f"Final bias: {b}")
 
-# Output the normalized weights and bias
-print(f"Normalized weights: {w_normalized}")
-print(f"Normalized bias: {b_normalized}")
-
-# Margin computation
-margin = 2 / norm  # Margin for a correctly classified perceptron
-print(f"Margin: {margin}")
-
-# Decision boundary function
+# Define the decision boundary
 def decision_boundary(x1):
-    return -(w_normalized[0] * x1 + b_normalized) / w_normalized[1]
+    return -(w[0] * x1 + b) / w[1]
 
-# Plotting the dataset and the normalized decision boundary
+# Plotting the dataset and hyperplane (optional visualization)
 import matplotlib.pyplot as plt
 
 # Positive and negative points
@@ -65,14 +56,14 @@ negative = data[data[:, 2] == -1][:, :2]
 plt.scatter(positive[:, 0], positive[:, 1], color='blue', label='+1')
 plt.scatter(negative[:, 0], negative[:, 1], color='red', label='-1')
 
-# Plot decision boundary
+# Plot the decision boundary
 x1 = np.linspace(-1, 4, 100)
 x2 = decision_boundary(x1)
-plt.plot(x1, x2, color='green', label='Normalized Decision Boundary')
+plt.plot(x1, x2, color='green', label='Decision Boundary')
 
 plt.xlabel('x1')
 plt.ylabel('x2')
 plt.legend()
 plt.grid(True)
-plt.title('Normalized Perceptron Decision Boundary')
+plt.title('Perceptron Algorithm')
 plt.show()
